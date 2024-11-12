@@ -6,7 +6,9 @@ class Volume {
 
 class CoffeeMachine {
     const blackCoffeeProportion: real := 0.05
-    const espressoProportion: real := 0.5
+    const blackCoffeeWaterProportion: real := 0.95
+    const espressoCoffeeProportion: real := 1.0 / 3.0
+    const espressoWaterProportion: real := 2.0 / 3.0
     const cappuccinoProportion: real := 1.0 / 3.0
     const latteCoffeeProportion: real := 0.25
     const latteMilkProportion: real := 0.75
@@ -88,7 +90,7 @@ class CoffeeMachine {
     method MakeBlackCoffee(volume: real, sugar: nat)
         modifies this
         requires this.on
-        requires 0.0 <= volume <= this.water
+        requires 0.0 <= volume * this.blackCoffeeWaterProportion <= this.water
         requires sugar <= this.sugar
         requires sugar <= this.maxDispensedSugar
         requires this.coffee >= volume * this.blackCoffeeProportion
@@ -96,13 +98,13 @@ class CoffeeMachine {
         ensures !this.isWaterHeatedUp
         ensures this.isMilkHeatedUp == old(this.isMilkHeatedUp)
         ensures this.coffee == old(this.coffee) - volume * this.blackCoffeeProportion
-        ensures this.water == old(this.water) - volume
+        ensures this.water == old(this.water) - volume * this.blackCoffeeWaterProportion
         ensures this.milk == old(this.milk)
         ensures this.sugar == old(this.sugar) - sugar
     {
         DispenseCoffee(volume * this.blackCoffeeProportion);
         HeatUpWater();
-        PourWater(volume);
+        PourWater(volume * this.blackCoffeeWaterProportion);
         DispenseSugar(sugar);
         CoolDownWater();
         
@@ -112,21 +114,21 @@ class CoffeeMachine {
     method MakeEspresso(volume: real, sugar: nat)
         modifies this
         requires this.on
-        requires 0.0 <= volume <= this.water
+        requires 0.0 <= volume * this.espressoWaterProportion <= this.water
         requires sugar <= this.sugar
         requires sugar <= this.maxDispensedSugar
-        requires this.coffee >= volume * this.espressoProportion
+        requires this.coffee >= volume * this.espressoCoffeeProportion
         ensures this.on
         ensures !this.isWaterHeatedUp
         ensures this.isMilkHeatedUp == old(this.isMilkHeatedUp)
-        ensures this.coffee == old(this.coffee) - volume * this.espressoProportion
-        ensures this.water == old(this.water) - volume
+        ensures this.coffee == old(this.coffee) - volume * this.espressoCoffeeProportion
+        ensures this.water == old(this.water) - volume * this.espressoWaterProportion
         ensures this.milk == old(this.milk)
         ensures this.sugar == old(this.sugar) - sugar
     {
-        DispenseCoffee(volume * this.espressoProportion);
+        DispenseCoffee(volume * this.espressoCoffeeProportion);
         HeatUpWater();
-        PourWater(volume);
+        PourWater(volume * this.espressoWaterProportion);
         DispenseSugar(sugar);
         CoolDownWater();
 
@@ -137,16 +139,16 @@ class CoffeeMachine {
         modifies this
         requires this.on
         requires volume >= 0.0
-        requires volume * this.cappuccinoProportion <= this.water
+        requires this.water >= volume * this.cappuccinoProportion * this.espressoWaterProportion
+        requires this.coffee >= volume * this.cappuccinoProportion * this.espressoCoffeeProportion
+        requires this.milk >= 2.0 * volume * this.cappuccinoProportion
         requires sugar <= this.sugar
         requires sugar <= this.maxDispensedSugar
-        requires this.coffee >= volume * this.cappuccinoProportion * this.espressoProportion
-        requires this.milk >= 2.0 * volume * this.cappuccinoProportion
         ensures this.on
         ensures !this.isMilkHeatedUp
         ensures !this.isWaterHeatedUp
-        ensures this.coffee == old(this.coffee) - volume * this.cappuccinoProportion * this.espressoProportion
-        ensures this.water == old(this.water) - volume * this.cappuccinoProportion
+        ensures this.coffee == old(this.coffee) - volume * this.cappuccinoProportion * this.espressoCoffeeProportion
+        ensures this.water == old(this.water) - volume * this.cappuccinoProportion * this.espressoWaterProportion
         ensures this.milk == old(this.milk) - 2.0 * volume * this.cappuccinoProportion
         ensures this.sugar == old(this.sugar) - sugar
     {
@@ -164,16 +166,16 @@ class CoffeeMachine {
         modifies this
         requires this.on
         requires volume >= 0.0
-        requires volume * this.latteCoffeeProportion <= this.water
+        requires this.water >= volume * this.latteCoffeeProportion * this.espressoWaterProportion
+        requires this.coffee >= volume * this.latteCoffeeProportion * this.espressoCoffeeProportion
+        requires this.milk >= volume * this.latteMilkProportion
         requires sugar <= this.sugar
         requires sugar <= this.maxDispensedSugar
-        requires this.coffee >= volume * this.latteCoffeeProportion * this.espressoProportion
-        requires this.milk >= volume * this.latteMilkProportion
         ensures this.on
         ensures !this.isMilkHeatedUp
         ensures !this.isWaterHeatedUp
-        ensures this.coffee == old(this.coffee) - volume * this.latteCoffeeProportion * this.espressoProportion
-        ensures this.water == old(this.water) - volume * this.latteCoffeeProportion
+        ensures this.coffee == old(this.coffee) - volume * this.latteCoffeeProportion * this.espressoCoffeeProportion
+        ensures this.water == old(this.water) - volume * this.latteCoffeeProportion * this.espressoWaterProportion
         ensures this.milk == old(this.milk) - volume * this.latteMilkProportion
         ensures this.sugar == old(this.sugar) - sugar
     {
