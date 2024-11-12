@@ -13,42 +13,42 @@ class CoffeeMachine {
     const cappuccinoProportion: real := 1.0 / 3.0
     const latteCoffeeProportion: real := 0.25
     const latteMilkProportion: real := 0.75
-    const max_dispensed_sugar: nat := 4
+    const maxDispensedSugar: nat := 4
 
-    const max_coffee: real
-    const max_water: real
-    const max_milk: real
-    const max_sugar: nat
+    const maxCoffee: real
+    const maxWater: real
+    const maxMilk: real
+    const maxSugar: nat
 
     var coffee: real
     var water: real
     var milk: real
     var sugar: nat
     var on: bool
-    var is_water_heated_up: bool
-    var is_milk_heated_up: bool
+    var isWaterHeatedUp: bool
+    var isMilkHeatedUp: bool
 
-    constructor(max_coffee: real, coffee: real, max_water: real, water: real, max_milk: real, milk: real, max_sugar: nat, sugar: nat)
-        requires 0.0 <= coffee <= max_coffee
-        requires 0.0 <= water <= max_water
-        requires 0.0 <= milk <= max_milk
-        requires 0 <= sugar <= max_sugar
-        ensures this.max_coffee == max_coffee
-        ensures this.max_water == max_water
-        ensures this.max_milk == max_milk
-        ensures this.max_sugar == max_sugar
+    constructor(maxCoffee: real, coffee: real, maxWater: real, water: real, maxMilk: real, milk: real, maxSugar: nat, sugar: nat)
+        requires 0.0 <= coffee <= maxCoffee
+        requires 0.0 <= water <= maxWater
+        requires 0.0 <= milk <= maxMilk
+        requires 0 <= sugar <= maxSugar
+        ensures this.maxCoffee == maxCoffee
+        ensures this.maxWater == maxWater
+        ensures this.maxMilk == maxMilk
+        ensures this.maxSugar == maxSugar
         ensures this.coffee == coffee
         ensures this.water == water
         ensures this.milk == milk
         ensures this.sugar == sugar
         ensures !this.on
-        ensures !this.is_water_heated_up
-        ensures !this.is_milk_heated_up
+        ensures !this.isWaterHeatedUp
+        ensures !this.isMilkHeatedUp
     {
-        this.max_coffee := max_coffee;
-        this.max_water := max_water;
-        this.max_milk := max_milk;
-        this.max_sugar := max_sugar;
+        this.maxCoffee := maxCoffee;
+        this.maxWater := maxWater;
+        this.maxMilk := maxMilk;
+        this.maxSugar := maxSugar;
 
         this.coffee := coffee;
         this.water := water;
@@ -56,8 +56,8 @@ class CoffeeMachine {
         this.sugar := sugar;
 
         this.on := false;
-        this.is_water_heated_up := false;
-        this.is_milk_heated_up := false;
+        this.isWaterHeatedUp := false;
+        this.isMilkHeatedUp := false;
     }
 
     method TurnOn()
@@ -68,8 +68,8 @@ class CoffeeMachine {
         ensures this.water == old(this.water)
         ensures this.milk == old(this.milk)
         ensures this.sugar == old(this.sugar)
-        ensures this.is_water_heated_up == old(this.is_water_heated_up)
-        ensures this.is_milk_heated_up == old(this.is_milk_heated_up)
+        ensures this.isWaterHeatedUp == old(this.isWaterHeatedUp)
+        ensures this.isMilkHeatedUp == old(this.isMilkHeatedUp)
     {
         this.on := true;
     }
@@ -82,8 +82,8 @@ class CoffeeMachine {
         ensures this.water == old(this.water)
         ensures this.milk == old(this.milk)
         ensures this.sugar == old(this.sugar)
-        ensures this.is_water_heated_up == old(this.is_water_heated_up)
-        ensures this.is_milk_heated_up == old(this.is_milk_heated_up)
+        ensures this.isWaterHeatedUp == old(this.isWaterHeatedUp)
+        ensures this.isMilkHeatedUp == old(this.isMilkHeatedUp)
     {
         this.on := false;
     }
@@ -93,11 +93,11 @@ class CoffeeMachine {
         requires this.on
         requires 0.0 <= volume <= this.water
         requires sugar <= this.sugar
-        requires sugar <= this.max_dispensed_sugar
+        requires sugar <= this.maxDispensedSugar
         requires this.coffee >= volume * this.blackCoffeeProportion
         ensures this.on
-        ensures !this.is_water_heated_up
-        ensures this.is_milk_heated_up == old(this.is_milk_heated_up)
+        ensures !this.isWaterHeatedUp
+        ensures this.isMilkHeatedUp == old(this.isMilkHeatedUp)
         ensures this.coffee == old(this.coffee) - volume * this.blackCoffeeProportion
         ensures this.water == old(this.water) - volume
         ensures this.milk == old(this.milk)
@@ -117,11 +117,11 @@ class CoffeeMachine {
         requires this.on
         requires 0.0 <= volume <= this.water
         requires sugar <= this.sugar
-        requires sugar <= this.max_dispensed_sugar
+        requires sugar <= this.maxDispensedSugar
         requires this.coffee >= volume * this.espressoProportion
         ensures this.on
-        ensures !this.is_water_heated_up
-        ensures this.is_milk_heated_up == old(this.is_milk_heated_up)
+        ensures !this.isWaterHeatedUp
+        ensures this.isMilkHeatedUp == old(this.isMilkHeatedUp)
         ensures this.coffee == old(this.coffee) - volume * this.espressoProportion
         ensures this.water == old(this.water) - volume
         ensures this.milk == old(this.milk)
@@ -142,12 +142,12 @@ class CoffeeMachine {
         requires volume >= 0.0
         requires volume * this.cappuccinoProportion <= this.water
         requires sugar <= this.sugar
-        requires sugar <= this.max_dispensed_sugar
+        requires sugar <= this.maxDispensedSugar
         requires this.coffee >= volume * this.cappuccinoProportion * this.espressoProportion
         requires this.milk >= 2.0 * volume * this.cappuccinoProportion
         ensures this.on
-        ensures !this.is_milk_heated_up
-        ensures !this.is_water_heated_up
+        ensures !this.isMilkHeatedUp
+        ensures !this.isWaterHeatedUp
         ensures this.coffee == old(this.coffee) - volume * this.cappuccinoProportion * this.espressoProportion
         ensures this.water == old(this.water) - volume * this.cappuccinoProportion
         ensures this.milk == old(this.milk) - 2.0 * volume * this.cappuccinoProportion
@@ -169,12 +169,12 @@ class CoffeeMachine {
         requires volume >= 0.0
         requires volume * this.latteCoffeeProportion <= this.water
         requires sugar <= this.sugar
-        requires sugar <= this.max_dispensed_sugar
+        requires sugar <= this.maxDispensedSugar
         requires this.coffee >= volume * this.latteCoffeeProportion * this.espressoProportion
         requires this.milk >= volume * this.latteMilkProportion
         ensures this.on
-        ensures !this.is_milk_heated_up
-        ensures !this.is_water_heated_up
+        ensures !this.isMilkHeatedUp
+        ensures !this.isWaterHeatedUp
         ensures this.coffee == old(this.coffee) - volume * this.latteCoffeeProportion * this.espressoProportion
         ensures this.water == old(this.water) - volume * this.latteCoffeeProportion
         ensures this.milk == old(this.milk) - volume * this.latteMilkProportion
@@ -198,8 +198,8 @@ class CoffeeMachine {
         ensures this.water == old(this.water)
         ensures this.milk == old(this.milk)
         ensures this.sugar == old(this.sugar)
-        ensures this.is_milk_heated_up == old(is_milk_heated_up)
-        ensures this.is_water_heated_up == old(is_water_heated_up)
+        ensures this.isMilkHeatedUp == old(isMilkHeatedUp)
+        ensures this.isWaterHeatedUp == old(isWaterHeatedUp)
     {
         this.coffee := this.coffee - mass;
         print "Dispensed the coffee";
@@ -214,8 +214,8 @@ class CoffeeMachine {
         ensures this.water == old(this.water)
         ensures this.milk == old(this.milk)
         ensures this.sugar == old(this.sugar) - number
-        ensures this.is_milk_heated_up == old(is_milk_heated_up)
-        ensures this.is_water_heated_up == old(is_water_heated_up)
+        ensures this.isMilkHeatedUp == old(isMilkHeatedUp)
+        ensures this.isWaterHeatedUp == old(isWaterHeatedUp)
     {
         this.sugar := this.sugar - number;
         print "Dispensed the sugar";
@@ -224,15 +224,15 @@ class CoffeeMachine {
     method PourWater(volume: real)
         modifies this
         requires this.on
-        requires this.is_water_heated_up
+        requires this.isWaterHeatedUp
         requires 0.0 <= volume <= this.water
         ensures this.on
         ensures this.coffee == old(this.coffee)
         ensures this.water == old(this.water) - volume
         ensures this.milk == old(this.milk)
         ensures this.sugar == old(this.sugar)
-        ensures this.is_milk_heated_up == old(is_milk_heated_up)
-        ensures this.is_water_heated_up == old(is_water_heated_up)
+        ensures this.isMilkHeatedUp == old(isMilkHeatedUp)
+        ensures this.isWaterHeatedUp == old(isWaterHeatedUp)
     {
         this.water := this.water - volume;
         print "Poured the water";
@@ -241,16 +241,16 @@ class CoffeeMachine {
     method PourMilk(volume: real)
         modifies this
         requires this.on
-        requires this.is_milk_heated_up
+        requires this.isMilkHeatedUp
         requires 0.0 <= volume <= this.milk
         ensures this.on
-        ensures this.is_milk_heated_up == old(is_milk_heated_up)
+        ensures this.isMilkHeatedUp == old(isMilkHeatedUp)
         ensures this.coffee == old(this.coffee)
         ensures this.water == old(this.water)
         ensures this.milk == old(this.milk) - volume
         ensures this.sugar == old(this.sugar)
-        ensures this.is_milk_heated_up == old(is_milk_heated_up)
-        ensures this.is_water_heated_up == old(is_water_heated_up)
+        ensures this.isMilkHeatedUp == old(isMilkHeatedUp)
+        ensures this.isWaterHeatedUp == old(isWaterHeatedUp)
     {
         this.milk := this.milk - volume;
         print "Poured the milk";
@@ -259,15 +259,15 @@ class CoffeeMachine {
     method SteamMilk(volume: real)
         modifies this
         requires this.on
-        requires this.is_milk_heated_up
+        requires this.isMilkHeatedUp
         requires 0.0 <= volume <= this.milk
         ensures this.on
         ensures this.coffee == old(this.coffee)
         ensures this.water == old(this.water)
         ensures this.milk == old(this.milk) - volume
         ensures this.sugar == old(this.sugar)
-        ensures this.is_milk_heated_up == old(is_milk_heated_up)
-        ensures this.is_water_heated_up == old(is_water_heated_up)
+        ensures this.isMilkHeatedUp == old(isMilkHeatedUp)
+        ensures this.isWaterHeatedUp == old(isWaterHeatedUp)
     {
         this.milk := this.milk - volume;
         print "Steamed the milk";
@@ -277,14 +277,14 @@ class CoffeeMachine {
         modifies this
         requires !this.on
         requires mass >= 0.0
-        requires this.coffee + mass <= this.max_coffee
+        requires this.coffee + mass <= this.maxCoffee
         ensures !this.on
         ensures this.coffee == old(this.coffee) + mass
         ensures this.water == old(this.water)
         ensures this.milk == old(this.milk)
         ensures this.sugar == old(this.sugar)
-        ensures this.is_milk_heated_up == old(is_milk_heated_up)
-        ensures this.is_water_heated_up == old(is_water_heated_up)
+        ensures this.isMilkHeatedUp == old(isMilkHeatedUp)
+        ensures this.isWaterHeatedUp == old(isWaterHeatedUp)
     {
         this.coffee := this.coffee + mass;
     }
@@ -293,14 +293,14 @@ class CoffeeMachine {
         modifies this
         requires !this.on
         requires volume >= 0.0
-        requires this.water + volume <= this.max_water
+        requires this.water + volume <= this.maxWater
         ensures !this.on
         ensures this.coffee == old(this.coffee)
         ensures this.water == old(this.water) + volume
         ensures this.milk == old(this.milk)
         ensures this.sugar == old(this.sugar)
-        ensures this.is_milk_heated_up == old(is_milk_heated_up)
-        ensures this.is_water_heated_up == old(is_water_heated_up)
+        ensures this.isMilkHeatedUp == old(isMilkHeatedUp)
+        ensures this.isWaterHeatedUp == old(isWaterHeatedUp)
     {
         this.water := this.water + volume;
     }
@@ -309,14 +309,14 @@ class CoffeeMachine {
         modifies this
         requires !this.on
         requires volume >= 0.0
-        requires this.milk + volume <= this.max_milk
+        requires this.milk + volume <= this.maxMilk
         ensures !this.on
         ensures this.coffee == old(this.coffee)
         ensures this.water == old(this.water)
         ensures this.milk == old(this.milk) + volume
         ensures this.sugar == old(this.sugar)
-        ensures this.is_milk_heated_up == old(is_milk_heated_up)
-        ensures this.is_water_heated_up == old(is_water_heated_up)
+        ensures this.isMilkHeatedUp == old(isMilkHeatedUp)
+        ensures this.isWaterHeatedUp == old(isWaterHeatedUp)
     {
         this.milk := this.milk + volume;
     }
@@ -324,14 +324,14 @@ class CoffeeMachine {
     method RefillSugar(number: nat)
         modifies this
         requires !this.on
-        requires this.sugar + number <= this.max_sugar
+        requires this.sugar + number <= this.maxSugar
         ensures !this.on
         ensures this.coffee == old(this.coffee)
         ensures this.water == old(this.water)
         ensures this.milk == old(this.milk)
         ensures this.sugar == old(this.sugar) + number
-        ensures this.is_milk_heated_up == old(is_milk_heated_up)
-        ensures this.is_water_heated_up == old(is_water_heated_up)
+        ensures this.isMilkHeatedUp == old(isMilkHeatedUp)
+        ensures this.isWaterHeatedUp == old(isWaterHeatedUp)
     {
         this.sugar := this.sugar + number;
     }
@@ -340,14 +340,14 @@ class CoffeeMachine {
         modifies this
         requires this.on
         ensures this.on
-        ensures this.is_water_heated_up
-        ensures this.is_milk_heated_up == old(this.is_milk_heated_up)
+        ensures this.isWaterHeatedUp
+        ensures this.isMilkHeatedUp == old(this.isMilkHeatedUp)
         ensures this.coffee == old(this.coffee)
         ensures this.water == old(this.water)
         ensures this.milk == old(this.milk)
         ensures this.sugar == old(this.sugar)
     {
-        this.is_water_heated_up := true;
+        this.isWaterHeatedUp := true;
         print "Heated up the water";
     }
 
@@ -355,44 +355,44 @@ class CoffeeMachine {
         modifies this
         requires this.on
         ensures this.on
-        ensures this.is_water_heated_up == old(is_water_heated_up)
-        ensures this.is_milk_heated_up
+        ensures this.isWaterHeatedUp == old(isWaterHeatedUp)
+        ensures this.isMilkHeatedUp
         ensures this.coffee == old(this.coffee)
         ensures this.water == old(this.water)
         ensures this.milk == old(this.milk)
         ensures this.sugar == old(this.sugar)
     {
-        this.is_milk_heated_up := true;
+        this.isMilkHeatedUp := true;
         print "Heated up the milk";
     }
 
     method CoolDownWater()
         modifies this
         requires this.on
-        requires this.is_water_heated_up
+        requires this.isWaterHeatedUp
         ensures this.on
-        ensures !this.is_water_heated_up
+        ensures !this.isWaterHeatedUp
         ensures this.coffee == old(this.coffee)
         ensures this.water == old(this.water)
         ensures this.milk == old(this.milk)
         ensures this.sugar == old(this.sugar)
-        ensures this.is_milk_heated_up == old(this.is_milk_heated_up)
+        ensures this.isMilkHeatedUp == old(this.isMilkHeatedUp)
     {
-        this.is_water_heated_up := false;
+        this.isWaterHeatedUp := false;
     }
 
     method CoolDownMilk()
         modifies this
         requires this.on
-        requires this.is_milk_heated_up
+        requires this.isMilkHeatedUp
         ensures this.on
-        ensures !this.is_milk_heated_up
+        ensures !this.isMilkHeatedUp
         ensures this.coffee == old(this.coffee)
         ensures this.water == old(this.water)
         ensures this.milk == old(this.milk)
         ensures this.sugar == old(this.sugar)
-        ensures this.is_water_heated_up == old(this.is_water_heated_up)
+        ensures this.isWaterHeatedUp == old(this.isWaterHeatedUp)
     {
-        this.is_milk_heated_up := false;
+        this.isMilkHeatedUp := false;
     }
 }
