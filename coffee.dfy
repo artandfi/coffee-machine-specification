@@ -1,7 +1,7 @@
 class Volume {
-    const small: real := 100.0
-    const medium: real := 200.0
-    const large: real := 300.0
+    static const small: real := 100.0
+    static const medium: real := 200.0
+    static const large: real := 300.0
 }
 
 class CoffeeMachine {
