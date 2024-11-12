@@ -1,10 +1,7 @@
-datatype Volume = Small | Medium | Large
-
-function VolumeInMl(volume: Volume): real {
-    match volume
-        case Small => 100.0
-        case Medium => 200.0
-        case Large => 300.0
+class Volume {
+    const small: real := 100.0
+    const medium: real := 200.0
+    const large: real := 300.0
 }
 
 class CoffeeMachine {
