@@ -395,3 +395,22 @@ class CoffeeMachine {
         this.isMilkHeatedUp := false;
     }
 }
+
+method Main() {
+    var coffee := 1000.0;
+    var water := 1000.0;
+    var milk := 1000.0;
+    var sugar := 100;
+    var coffeeMachine := new CoffeeMachine(coffee, coffee, water, water, milk, milk, sugar, sugar);
+
+    coffeeMachine.TurnOn();
+
+    coffeeMachine.MakeBlackCoffee(Volume.small, 2);
+    coffeeMachine.MakeLatte(Volume.large, 3);
+    coffeeMachine.MakeEspresso(Volume.medium, 4);
+    coffeeMachine.MakeCappuccino(Volume.small, 1);
+    coffeeMachine.MakeLatte(Volume.medium, 0);
+    coffeeMachine.MakeLatte(Volume.large, 4);
+    coffeeMachine.MakeLatte(Volume.large, 4);
+    // coffeeMachine.MakeLatte(Volume.large, 4); not enough
+}
